@@ -4,7 +4,6 @@ import { handleSelectOptions } from '../helpers/select';
 import { bindImageEvents, uploadImage, setImages } from '../helpers/inputImageFile';
 import { addNewPost, updatePost, getPostInfo } from '../requests';
 import { moveToPage } from '../router';
-import { WEBPACK_DEV_SERVER } from '../config';
 
 const $inputFile = $('.register-upload__input');
 const $registerUpload = $('.register-upload');
@@ -24,7 +23,6 @@ const LIMIT = {
 
 const inputs = {
   title: '제목',
-  type: '종류',
   content: '글 본문',
 };
 
@@ -51,6 +49,7 @@ const limitInputLength = ({ type, value, $input, $inputLength }) => {
 
 const checkEmptyInput = () => {
   for (const [key, value] of Object.entries(state)) {
+    if (key === 'type') continue;
     if (key !== 'images' && value === '') {
       alert(`${inputs[key]}의 값을 입력해주세요.`);
       return true;
@@ -67,7 +66,7 @@ const registPost = async e => {
 
     state.title = state.title.trim();
     state.type = state.type.trim();
-    state.content = state.content.trim();
+    state.content = state.content.trim().replaceAll('\n', '<br>');
 
     const hasEmptyInput = checkEmptyInput();
     if (hasEmptyInput) return;
@@ -94,10 +93,7 @@ const setSelectOptionByUser = ({ id, city, district }) => {
 };
 
 const setValueByUser = async user => {
-  if (
-    history.state.prev === `${WEBPACK_DEV_SERVER}/mypage` ||
-    history.state.prev.includes(`${WEBPACK_DEV_SERVER}/post`)
-  ) {
+  if (JSON.parse(sessionStorage.getItem('isEditingPost'))) {
     isEdit = true;
     $('.register-edit-btn').classList.remove('hidden');
     $('.register-submit-btn').classList.add('hidden');
@@ -107,10 +103,16 @@ const setValueByUser = async user => {
 
     $title.value = post.title;
     $city.value = post.city;
+    handleSelectOptions({ $city, $district });
+
     $district.value = post.district;
     $animalType.value = post.type;
-    $content.value = post.content;
+    $content.value = post.content.replaceAll('<br>', '\n');
+
     setImages(post.images);
+
+    $titleLength.innerText = post.title.length;
+    $contentLength.innerText = post.content.length;
     state = { ...post };
   } else setSelectOptionByUser(user);
 };

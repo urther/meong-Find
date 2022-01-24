@@ -1,6 +1,7 @@
 @use '../utils' as *;
 
 .mainpage {
+  position: relative;
   width: rem(1188px);
   //   height: rem(699px);
   //   text-align: center;
@@ -9,12 +10,15 @@
 .main-nav {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  margin-bottom: rem(50px);
 
   button {
     width: rem(75px);
     height: rem(42px);
     background: $navy;
     margin-left: rem(5px);
+    margin-top: rem(5px);
     border-radius: rem(20px);
     border: none;
     font-weight: 600;
@@ -96,12 +100,6 @@
     margin-bottom: rem(40px);
     width: rem(346px);
 
-    a,
-    img,
-    span {
-      pointer-events: none;
-    }
-
     &:nth-child(3n) {
       margin-right: 0;
     }
@@ -110,17 +108,23 @@
 
 .search-error {
   @include autoMargin();
+  height: 50vh;
+  padding-top: 10%;
   font-size: rem(20px);
   margin-top: rem(30px);
 }
 
-.arrow-up {
+.spinner {
   position: fixed;
-  bottom: rem(70px);
-  right: rem(70px);
-  z-index: 99;
-  color: $darkgray;
-  border-radius: 50%;
-  border: 0;
-  background: none;
+  top: 50%;
+  left: 50%;
+  transform: translate3D(-50%, 0, 0);
+  width: 50px;
+  text-align: center;
+}
+
+.main-scroll {
+  // background-color: green;
+  width: 7px;
+  height: 7px;
 }

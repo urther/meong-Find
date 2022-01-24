@@ -32,24 +32,20 @@ const handleData = data => {
       return filtered;
     },
     update(id, payload) {
-      datas = datas.map(data =>
-        data.id === id ? { ...data, ...payload } : data
-      );
+      datas = datas.map(data => (data.id === id ? { ...data, ...payload } : data));
       return datas.find(data => data.id === id);
     },
     search(payload) {
       return datas.filter(
         data =>
-          data.title.includes(payload.title) ||
-          data.animal.includes(payload.title) ||
-          data.type.includes(payload.title)
+          data.title.includes(payload.title) || data.animal.includes(payload.title) || data.type.includes(payload.title)
       );
     },
-    pageFilter(payload) {
-      return datas.filter(
-        (_, index) =>
-          index >= (payload.page - 1) * 6 && index < payload.page * 6
-      );
+    pageFilter(page, posts = datas) {
+      return posts.filter((_, index) => index >= (page - 1) * 6 && index < page * 6);
+    },
+    pageReloadFilter(payload) {
+      return datas.filter((_, index) => index < payload.page * 6);
     },
   };
 };
